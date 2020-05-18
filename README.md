@@ -3,6 +3,13 @@ react-use-modal
 
 Simple solution for displaying and resolving modals in React
 
+To do
+-----
+
+[ ] Tests
+[ ] Support for click-outside
+[ ] Overlay styling
+
 Installation
 ------------
 
