@@ -1,6 +1,6 @@
 {
   "name": "react-use-modal",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "description": "Simple, async solution for handling modals in React",
