@@ -7,6 +7,7 @@ export interface IModalOverlay {
   modal: Modal<any, any>;
   backgroundClassName?: string;
   backgroundStyle?: CSSProperties;
+  onOverlayClick(): void;
 }
 
 const modalOverlayWrapperStyle: CSSProperties = {
@@ -33,7 +34,12 @@ const modalOverlayContent: CSSProperties = {
   zIndex: 1,
 };
 
-export const ModalOverlay: FunctionComponent<IModalOverlay> = ({ modal, backgroundStyle, backgroundClassName }) => {
+export const ModalOverlay: FunctionComponent<IModalOverlay> = ({
+  modal,
+  backgroundStyle,
+  backgroundClassName,
+  onOverlayClick,
+}) => {
   const mergedBackgroundStyle = useMemo(
     () => {
       if (DEV_MODE && backgroundStyle && backgroundClassName) {
@@ -56,7 +62,11 @@ export const ModalOverlay: FunctionComponent<IModalOverlay> = ({ modal, backgrou
 
   return (
     <div style={modalOverlayWrapperStyle}>
-      <div style={mergedBackgroundStyle} className={backgroundClassName}/>
+      <div
+        style={mergedBackgroundStyle}
+        className={backgroundClassName}
+        onClick={onOverlayClick}
+      />
       <div style={modalOverlayContent}>
         {modal.getComponent()}
       </div>

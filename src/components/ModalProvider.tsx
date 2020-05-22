@@ -1,6 +1,7 @@
 import React, { CSSProperties, FunctionComponent, useCallback, useRef, useState } from 'react';
 
-import { IGenericModal, IModalContext, Modal, ModalContext } from '../context/ModalContext';
+import { noop } from '../helpers/noop';
+import { IGenericModal, IModalContext, Modal, ModalContext, ModalProps } from '../context/ModalContext';
 import { ModalOverlay } from './ModalOverlay';
 
 export interface IModalProvider {
@@ -19,6 +20,7 @@ export const ModalProvider: FunctionComponent<IModalProvider> = ({
 }) => {
   const [currentModal, setCurrentModal] = useState<Modal<any, any> | null>(null);
   const modalArrayRef = useRef<Modal<any, any>[]>([]);
+  const overlayClickHandler = useRef<() => void>(noop);
 
   const clearModal = useCallback(
     (modal: Modal<any, any>) => {
@@ -34,9 +36,14 @@ export const ModalProvider: FunctionComponent<IModalProvider> = ({
   const modal = useCallback(
     <T extends any, P extends IGenericModal<T>>(
       component: FunctionComponent<P>,
-      props: Omit<P, 'onResolve'>,
+      props: ModalProps<P>,
     ) => {
-      const newModal = new Modal<T, P>(component, props, clearModal);
+      const newModal = new Modal<T, P>(
+        component,
+        props,
+        clearModal,
+        setOverlayClickHandler,
+      );
 
       modalArrayRef.current.push(newModal);
       setCurrentModal(newModal);
@@ -46,10 +53,15 @@ export const ModalProvider: FunctionComponent<IModalProvider> = ({
     [clearModal],
   );
 
+  const setOverlayClickHandler = (handler: () => void) => {
+    overlayClickHandler.current = handler;
+  };
+
   const contextValue: IModalContext = {
     currentModal,
     modal,
     clearModal,
+    setOverlayClickHandler,
   };
 
   const isInert = Boolean(currentModal);
@@ -61,6 +73,7 @@ export const ModalProvider: FunctionComponent<IModalProvider> = ({
           modal={modalArrayRef.current[modalArrayRef.current.length - 1]}
           backgroundClassName={backgroundClassName}
           backgroundStyle={backgroundStyle}
+          onOverlayClick={() => overlayClickHandler.current()}
         />
       )}
       <div
