@@ -6,8 +6,8 @@ Simple solution for displaying and resolving modals in React
 To do
 -----
 
-- [ ] Support for click-outside
-- [ ] Overlay styling
+- [x] Support for click-outside
+- [x] Overlay styling
 - [ ] Example
 - [ ] Better documentation (usage)
 - [ ] Better documentation (code)
