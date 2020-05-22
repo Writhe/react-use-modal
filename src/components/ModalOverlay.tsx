@@ -1,9 +1,12 @@
-import React, { CSSProperties, FunctionComponent } from 'react';
+import React, { CSSProperties, FunctionComponent, useMemo } from 'react';
 
+import { DEV_MODE } from '../helpers/isDevMode';
 import { Modal } from '../context/ModalContext';
 
 export interface IModalOverlay {
   modal: Modal<any, any>;
+  backgroundClassName?: string;
+  backgroundStyle?: CSSProperties;
 }
 
 const modalOverlayWrapperStyle: CSSProperties = {
@@ -18,7 +21,7 @@ const modalOverlayWrapperStyle: CSSProperties = {
   zIndex: 99,
 };
 
-const modalOverlayBackground: CSSProperties = {
+const modalOverlayBackgroundStyle: CSSProperties = {
   position: 'absolute',
   top: 0,
   left: 0,
@@ -30,10 +33,30 @@ const modalOverlayContent: CSSProperties = {
   zIndex: 1,
 };
 
-export const ModalOverlay: FunctionComponent<IModalOverlay> = ({ modal }) => {
+export const ModalOverlay: FunctionComponent<IModalOverlay> = ({ modal, backgroundStyle, backgroundClassName }) => {
+  const mergedBackgroundStyle = useMemo(
+    () => {
+      if (DEV_MODE && backgroundStyle && backgroundClassName) {
+        console.log(
+          '%creact-use-modal:%cYou are using backgroundStyle and backgroundClassName props at the same time. Inline styles (including backgroundStyle) will be ignored.',
+          'color: yellow; font-weight: bold;',
+          'color: yellow; font-weight: regular;',
+        );
+      }
+
+      if (backgroundClassName) return {};
+
+      return {
+        ...modalOverlayBackgroundStyle,
+        ...(backgroundStyle || {}),
+      };
+    },
+    [backgroundStyle, backgroundClassName],
+  );
+
   return (
     <div style={modalOverlayWrapperStyle}>
-      <div style={modalOverlayBackground} />
+      <div style={mergedBackgroundStyle} className={backgroundClassName}/>
       <div style={modalOverlayContent}>
         {modal.getComponent()}
       </div>

@@ -6,12 +6,16 @@ import { ModalOverlay } from './ModalOverlay';
 export interface IModalProvider {
   inertClassName?: string;
   inertStyle?: CSSProperties;
+  backgroundClassName?: string;
+  backgroundStyle?: CSSProperties;
 }
 
 export const ModalProvider: FunctionComponent<IModalProvider> = ({
   children,
   inertClassName,
   inertStyle,
+  backgroundStyle,
+  backgroundClassName,
 }) => {
   const [currentModal, setCurrentModal] = useState<Modal<any, any> | null>(null);
   const modalArrayRef = useRef<Modal<any, any>[]>([]);
@@ -53,7 +57,11 @@ export const ModalProvider: FunctionComponent<IModalProvider> = ({
   return (
     <ModalContext.Provider value={contextValue}>
       {Boolean(currentModal) && (
-        <ModalOverlay modal={modalArrayRef.current[modalArrayRef.current.length - 1]}/>
+        <ModalOverlay
+          modal={modalArrayRef.current[modalArrayRef.current.length - 1]}
+          backgroundClassName={backgroundClassName}
+          backgroundStyle={backgroundStyle}
+        />
       )}
       <div
         className={isInert ? inertClassName : ''}
