@@ -8,10 +8,11 @@ To do
 
 - [x] Support for click-outside
 - [x] Overlay styling
+- [x] Integration test
+- [ ] Unit tests
 - [ ] Example
 - [ ] Better documentation (usage)
 - [ ] Better documentation (code)
-- [ ] Tests
 
 Installation
 ------------
