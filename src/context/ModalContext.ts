@@ -72,11 +72,4 @@ export interface IModalContext {
   setOverlayClickHandler(handler: () => void): void;
 }
 
-const initialModalContext: IModalContext = {
-  currentModal: null,
-  // @ts-ignore
-  modal: noop,
-  clearModal: noop,
-};
-
-export const ModalContext = createContext<IModalContext>(initialModalContext);
+export const ModalContext = createContext<IModalContext>(null as unknown as IModalContext);
